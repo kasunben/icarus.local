@@ -172,7 +172,70 @@ cd /workspace
 git clone git@github.com:youruser/yourrepo.git
 ```
 
-### 3. GitHub access via HTTPS token (alternative)
+### 3. GPG key for verified commits
+
+Generate a GPG key inside the container:
+
+```bash
+gpg --full-generate-key
+```
+
+Choose:
+- Key type: `ECC (sign only)` or `RSA and RSA` (4096 bits)
+- Expiry: your preference (1y is a reasonable default)
+- Name and email: must match your `git config user.email`
+
+Get the key ID:
+
+```bash
+gpg --list-secret-keys --keyid-format=long
+```
+
+Output looks like:
+
+```
+sec   ed25519/ABC123DEF456 2024-01-01 [SC]
+```
+
+The key ID is the part after the `/` — e.g. `ABC123DEF456`.
+
+Export the public key and add it to GitHub:
+
+```bash
+gpg --armor --export ABC123DEF456
+```
+
+Copy the output (including `-----BEGIN PGP PUBLIC KEY BLOCK-----`) and add it at:
+**GitHub → Settings → SSH and GPG keys → New GPG key**
+
+Configure git to sign commits with this key:
+
+```bash
+git config --global user.signingkey ABC123DEF456
+git config --global commit.gpgsign true
+git config --global gpg.program gpg
+```
+
+Configure GPG to use the terminal for passphrase entry (required in a container — no GUI pinentry):
+
+```bash
+echo "pinentry-program /usr/bin/pinentry-tty" >> ~/.gnupg/gpg-agent.conf
+gpgconf --kill gpg-agent
+```
+
+Test with a signed commit:
+
+```bash
+git commit -S -m "test signed commit"
+git log --show-signature -1
+```
+
+> **Passphrase tip:** if you used a passphrase on your GPG key, you'll be prompted on
+> every commit. For unattended/agentic use, generate the key without a passphrase
+> (`--passphrase ""`), or use a short cache TTL in `gpg-agent.conf`:
+> `default-cache-ttl 3600`
+
+### 4. GitHub access via HTTPS token (alternative)
 
 If you prefer HTTPS over SSH, create a GitHub personal access token
 (GitHub → Settings → Developer settings → Personal access tokens → Fine-grained)

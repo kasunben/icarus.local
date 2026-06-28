@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     python3-venv \
     ca-certificates \
     gnupg \
+    pinentry-tty \
     && rm -rf /var/lib/apt/lists/*
 
 # Node.js 22 LTS via NodeSource
