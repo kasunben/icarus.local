@@ -83,7 +83,7 @@ claude
 ```
 
 Claude Code starts in the current directory. It can read and write any file under
-`/workspace`, which maps to `CODING_WORKSPACE` on your Mac (default: `~/Dev`).
+`/workspace`, which maps to `CODING_WORKSPACE` on your Mac (default: `~/coding-sandbox`).
 
 ### Run a one-shot task
 
@@ -114,12 +114,12 @@ make logs SERVICE=coding-sandbox
 
 ## Working with files
 
-Your code directory (`CODING_WORKSPACE` in `.env`, default `~/Dev`) is mounted
+Your code directory (`CODING_WORKSPACE` in `.env`, default `~/coding-sandbox`) is mounted
 read-write at `/workspace`. All edits Claude makes inside the container appear
 immediately on your Mac.
 
 ```
-Mac path:             ~/Dev/my-project
+Mac path:             ~/coding-sandbox/my-project
 Container path:       /workspace/my-project
 ```
 
