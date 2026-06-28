@@ -45,8 +45,15 @@ make shell SERVICE=coding-sandbox
 Inside the container:
 
 ```bash
-claude login
+TERM=dumb claude login
 ```
+
+`TERM=dumb` disables the animation so the OAuth URL prints as plain text.
+Copy the `https://` URL from the output, open it in your Mac's browser, log in,
+then paste the code back at the prompt.
+
+> **Without `TERM=dumb`:** the animation draws over the URL, making it hard to find.
+> You can still scroll up in your terminal to retrieve it, but `TERM=dumb` is easier.
 
 Follow the browser OAuth flow. The session token is stored in the
 `icarus-coding-sandbox-claude` named volume and survives container restarts.
@@ -178,9 +185,8 @@ make backup VOLUME=icarus-coding-sandbox-claude
 **`claude: command not found`**
 The image wasn't built. Run `make build SERVICE=coding-sandbox`.
 
-**`claude login` opens a URL but auth fails**
-Copy the URL from the terminal and open it on your Mac. The container has no browser —
-OAuth redirects won't work automatically.
+**`claude login` shows an animation but no visible URL**
+Use `TERM=dumb claude login` instead — disables the animation so the URL prints as plain text.
 
 **Session expired inside the container**
 Run `make shell SERVICE=coding-sandbox` and `claude login` again.
