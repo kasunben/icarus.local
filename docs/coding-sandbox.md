@@ -132,6 +132,60 @@ claude
 
 ---
 
+## Git setup (one-time)
+
+Git is pre-installed. Do this once after first login — config is persisted in the
+`icarus-coding-sandbox-claude` named volume alongside the Claude auth token.
+
+### 1. Set identity
+
+```bash
+# Inside the container:
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+### 2. GitHub access via SSH key (recommended)
+
+Generate a key inside the container:
+
+```bash
+ssh-keygen -t ed25519 -C "coding-sandbox" -f ~/.ssh/id_ed25519 -N ""
+cat ~/.ssh/id_ed25519.pub
+```
+
+Copy the printed public key and add it to GitHub:
+**GitHub → Settings → SSH and GPG keys → New SSH key**
+
+Test the connection:
+
+```bash
+ssh -T git@github.com
+```
+
+You should see: `Hi <username>! You've successfully authenticated...`
+
+Clone and push as normal:
+
+```bash
+cd /workspace
+git clone git@github.com:youruser/yourrepo.git
+```
+
+### 3. GitHub access via HTTPS token (alternative)
+
+If you prefer HTTPS over SSH, create a GitHub personal access token
+(GitHub → Settings → Developer settings → Personal access tokens → Fine-grained)
+with `Contents: read/write` for the repos you need, then store it:
+
+```bash
+git config --global credential.helper store
+# On first push/pull, enter your GitHub username and token as the password.
+# It will be saved to ~/.git-credentials for subsequent operations.
+```
+
+---
+
 ## Networking
 
 The sandbox is on `icarus-net`. It can reach:
