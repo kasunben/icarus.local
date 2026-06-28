@@ -26,7 +26,7 @@ RUN npm install -g @anthropic-ai/claude-code opencode-ai
 RUN pip3 install --break-system-packages uv ruff black
 
 # Non-root dev user (UID 1000)
-RUN useradd -m -u 1000 -s /bin/bash dev
+RUN useradd -m -u 1001 -s /bin/bash dev
 
 WORKDIR /workspace
 USER dev
