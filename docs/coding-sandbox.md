@@ -305,8 +305,13 @@ The image wasn't built. Run `make build SERVICE=coding-sandbox`.
 **`claude login` shows an animation but no visible URL**
 Use `TERM=dumb claude login` instead — disables the animation so the URL prints as plain text.
 
+**Claude Code shows "API Usage Billing" instead of your subscription**
+The auth token wasn't saved — likely because `/home/dev/.claude` was owned by root.
+Rebuild the image (`make build SERVICE=coding-sandbox`) and log in again with `TERM=dumb claude login`.
+After a successful login, `claude` should show your plan name instead of "API Usage Billing".
+
 **Session expired inside the container**
-Run `make shell SERVICE=coding-sandbox` and `claude login` again.
+Run `make shell SERVICE=coding-sandbox` and `TERM=dumb claude login` again.
 
 **File permission errors in `/workspace`**
 The `dev` user is UID 1000. If your Mac user has a different UID, files created inside
